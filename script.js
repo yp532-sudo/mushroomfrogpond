@@ -3,8 +3,8 @@
 
 // DEMO ONLY: localStorage is not secure authentication.
 // Never use this pattern for real accounts or sensitive information.
-const USERS_KEY = 'enchantedForestDemoUsers';
-const SESSION_KEY = 'enchantedForestDemoSession';
+const LEGACY_USERS_KEY = 'enchantedForestDemoUsers';
+const USER_DATA_PREFIX = 'enchantedForestUserData:';
 const PET_MOOD_IMAGES = {
   thirsty: 'images/pet-thirsty.png',
   stomachDiscomfort: 'images/pet-stomach-discomfort.png',
@@ -37,16 +37,79 @@ function localDateString(date) {
   return `${year}-${month}-${day}`;
 }
 
-function getUsers() {
-  try {
-    return JSON.parse(localStorage.getItem(USERS_KEY)) || {};
-  } catch (error) {
-    return {};
+async function apiRequest(url, options = {}) {
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {})
+    }
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    const error = new Error(
+      data.error || `Request failed (${response.status})`
+    );
+    error.status = response.status;
+    throw error;
   }
+
+  return data;
 }
 
-function saveUsers(users) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+
+// Keep meal and drink records in this browser for now.
+// Account passwords are no longer stored here.
+function loadJournalData(username) {
+  const key = USER_DATA_PREFIX + username;
+
+  try {
+    const saved = localStorage.getItem(key);
+
+    if (saved) {
+      const data = JSON.parse(saved);
+
+      return {
+        meals: Array.isArray(data.meals) ? data.meals : [],
+        drinks: Array.isArray(data.drinks) ? data.drinks : []
+      };
+    }
+  } catch (error) {
+    console.warn("Could not read saved journal data:", error);
+  }
+
+  // Import existing journal entries from the old demo storage.
+  let oldUsers = {};
+
+  try {
+    oldUsers =
+      JSON.parse(localStorage.getItem(LEGACY_USERS_KEY)) || {};
+  } catch (error) {
+    oldUsers = {};
+  }
+
+  const oldUser = oldUsers[username] || {};
+
+  const data = {
+    meals: Array.isArray(oldUser.meals) ? oldUser.meals : [],
+    drinks: Array.isArray(oldUser.drinks) ? oldUser.drinks : []
+  };
+
+  localStorage.setItem(key, JSON.stringify(data));
+
+  // Remove this account's old plaintext password when migrating it.
+  if (oldUsers[username]) {
+    delete oldUsers[username].password;
+
+    localStorage.setItem(
+      LEGACY_USERS_KEY,
+      JSON.stringify(oldUsers)
+    );
+  }
+
+  return data;
 }
 
 function cleanUsername(value) {
@@ -115,97 +178,168 @@ function signUp(event) {
   startSession(username);
 }
 
-function logIn(event) {
+async function signUp(event) {
   event.preventDefault();
 
-  const username = cleanUsername($('loginUsername').value);
-  const password = $('loginPassword').value;
-  const users = getUsers();
+  const username = cleanUsername($("signupUsername").value);
+  const password = $("signupPassword").value;
+  const petName = $("signupPetName").value.trim();
 
-  if (!users[username] || users[username].password !== password) {
+  if (!/^[a-z0-9_-]{3,24}$/.test(username)) {
     showMessage(
-      'loginMessage',
-      'Username or password not found. Check your details or create an account.'
+      "signupMessage",
+      "Use 3-24 letters, numbers, underscores or hyphens for your username."
     );
     return;
   }
 
-  $('loginForm').reset();
-  startSession(username);
+  if (password.length < 8 || password.length > 128) {
+    showMessage(
+      "signupMessage",
+      "Password must be between 8 and 128 characters."
+    );
+    return;
+  }
+
+  if (!petName || petName.length > 20) {
+    showMessage("signupMessage", "Please enter a pet name.");
+    return;
+  }
+
+  try {
+    const result = await apiRequest("/api/auth/register", {
+      method: "POST",
+      body: JSON.stringify({ username, password, petName })
+    });
+
+    $("signupForm").reset();
+    startSession(result.user);
+  } catch (error) {
+    showMessage("signupMessage", error.message);
+  }
 }
 
-function startSession(username) {
-  const users = getUsers();
 
-  if (!users[username]) return;
+async function logIn(event) {
+  event.preventDefault();
 
-  currentUsername = username;
-  currentUser = users[username];
+  const username = cleanUsername($("loginUsername").value);
+  const password = $("loginPassword").value;
 
-  localStorage.setItem(SESSION_KEY, username);
+  try {
+    const result = await apiRequest("/api/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ username, password })
+    });
 
-  $('authPanel').classList.add('hidden');
-  $('app').classList.remove('hidden');
-  $('accountBar').classList.remove('hidden');
+    $("loginForm").reset();
+    startSession(result.user);
+  } catch (error) {
+    showMessage("loginMessage", error.message);
+  }
+}
 
-  $('welcomeText').textContent = `Welcome, ${currentUser.username}!`;
-  $('petNameDisplay').textContent = currentUser.petName || 'Momo';
-  $('newPetName').value = currentUser.petName || 'Momo';
 
-  $('selectedDate').value = selectedDate;
-  $('mealDate').value = selectedDate;
-  $('drinkDate').value = selectedDate;
+function startSession(user) {
+  currentUsername = cleanUsername(user.username);
+
+  currentUser = {
+    ...user,
+    ...loadJournalData(currentUsername)
+  };
+
+  $("authPanel").classList.add("hidden");
+  $("app").classList.remove("hidden");
+  $("accountBar").classList.remove("hidden");
+
+  $("welcomeText").textContent =
+    `Welcome, ${currentUser.username}!`;
+
+  $("petNameDisplay").textContent =
+    currentUser.petName || "Momo";
+
+  $("newPetName").value =
+    currentUser.petName || "Momo";
+
+  $("selectedDate").value = selectedDate;
+  $("mealDate").value = selectedDate;
+  $("drinkDate").value = selectedDate;
 
   renderAll();
 }
 
-function logOut() {
+
+async function logOut() {
+  try {
+    await apiRequest("/api/auth/logout", {
+      method: "POST"
+    });
+  } catch (error) {
+    console.warn("Logout request failed:", error);
+  }
+
   currentUsername = null;
   currentUser = null;
 
-  localStorage.removeItem(SESSION_KEY);
+  $("app").classList.add("hidden");
+  $("accountBar").classList.add("hidden");
+  $("authPanel").classList.remove("hidden");
 
-  $('app').classList.add('hidden');
-  $('accountBar').classList.add('hidden');
-  $('authPanel').classList.remove('hidden');
+  $("loginForm").reset();
+  $("signupForm").reset();
 
-  $('loginForm').reset();
-  $('signupForm').reset();
-
-  showAuthTab('login');
+  showAuthTab("login");
 }
 
+
+// Save journal records locally, not account credentials.
 function saveCurrentUser() {
   if (!currentUsername || !currentUser) return;
 
-  const users = getUsers();
-  users[currentUsername] = currentUser;
+  const data = {
+    meals: currentUser.meals || [],
+    drinks: currentUser.drinks || []
+  };
 
-  saveUsers(users);
+  localStorage.setItem(
+    USER_DATA_PREFIX + currentUsername,
+    JSON.stringify(data)
+  );
 }
 
-function renamePet(event) {
+async function renamePet(event) {
   event.preventDefault();
 
-  const name = $('newPetName').value.trim();
+  const name = $("newPetName").value.trim();
 
-  if (!name) {
-    showMessage('petMessageStatus', 'Enter a pet name first.');
+  if (!name || name.length > 20) {
+    showMessage(
+      "petMessageStatus",
+      "Pet name must be 1-20 characters."
+    );
     return;
   }
 
-  currentUser.petName = name.slice(0, 20);
-  saveCurrentUser();
+  try {
+    const result = await apiRequest("/api/profile", {
+      method: "PATCH",
+      body: JSON.stringify({ petName: name })
+    });
 
-  $('petNameDisplay').textContent = currentUser.petName;
+    currentUser.petName = result.user.petName;
+    $("petNameDisplay").textContent = currentUser.petName;
+    $("newPetName").value = currentUser.petName;
 
-  showMessage(
-    'petMessageStatus',
-    `Your pet is now called ${currentUser.petName}!`,
-    true
-  );
+    showMessage(
+      "petMessageStatus",
+      `Your pet is now called ${currentUser.petName}!`,
+      true
+    );
 
-  updatePet();
+    updatePet();
+  } catch (error) {
+    showMessage("petMessageStatus", error.message);
+  }
 }
 function renderPetImage(mood) {
   const image = $('petImage');
@@ -999,7 +1133,7 @@ function showFoodSearchMessage(message) {
   if (element) element.textContent = message;
 }
 
-function initialize() {
+async function initialize() {
   $('showLoginButton').addEventListener(
     'click',
     () => showAuthTab('login')
@@ -1041,15 +1175,19 @@ function initialize() {
   $('drinkDate').value = selectedDate;
   $('mealTime').value = currentTimeString();
 
-  const savedSession = localStorage.getItem(SESSION_KEY);
-  const users = getUsers();
+  try {
+  const result = await apiRequest("/api/auth/me");
+  startSession(result.user);
+} catch (error) {
+  showAuthTab("login");
 
-  if (savedSession && users[savedSession]) {
-    startSession(savedSession);
-  } else {
-    localStorage.removeItem(SESSION_KEY);
-    showAuthTab('login');
+  if (error.status !== 401) {
+    showMessage(
+      "loginMessage",
+      "Could not connect to the account server. Check that npm start is running."
+    );
   }
+}
 }
 
 document.addEventListener('DOMContentLoaded', initialize);

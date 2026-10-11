@@ -53,11 +53,11 @@
           <label for="signupUsername">Choose a username</label>
           <input id="signupUsername" name="username" autocomplete="username" required minlength="3" maxlength="24" placeholder="At least 3 characters">
           <label for="signupPassword">Create a demo password</label>
-          <input id="signupPassword" name="password" type="password" autocomplete="new-password" required minlength="4" placeholder="At least 4 characters">
+          <input id="signupPassword" name="password" type="password" autocomplete="new-password" required minlength="8" maxlength="128" placeholder="At least 8 characters">
           <label for="signupPetName">Name your mushroom-frog pet</label>
           <input id="signupPetName" name="petName" required maxlength="20" placeholder="e.g. Momo, Moss, Sprout">
           <button class="button button-primary" type="submit">Create my forest</button>
-          <p class="small-note">Demo only: your account is saved in this browser, not on a secure server.</p>
+          <p class="small-note">Your account is stored in a local SQLite database. Use a unique password for this project.</p>
           <p id="signupMessage" class="form-message" aria-live="polite"></p>
         </form>
       </div>

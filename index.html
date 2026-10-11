@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enchanted Forest | Meal & Hydration Tracker</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <div class="brand-icon" aria-hidden="true">🍄</div>
+      <div>
+        <p class="eyebrow">A LITTLE MAGIC, EVERY DAY</p>
+        <h1>Enchanted Forest</h1>
+      </div>
+    </div>
+    <div id="accountBar" class="account-bar hidden">
+      <span id="welcomeText">Welcome back!</span>
+      <button id="logoutButton" class="button button-ghost" type="button">Log out</button>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <section id="authPanel" class="panel auth-panel">
+      <div class="auth-art" aria-hidden="true">
+        <div class="moon">☾</div>
+        <div class="mushroom-large">🍄</div>
+        <div class="frog-large">🐸</div>
+        <div class="sparkle sparkle-one">✦</div>
+        <div class="sparkle sparkle-two">✧</div>
+      </div>
+      <div class="auth-content">
+        <p class="eyebrow">WELCOME, FOREST FRIEND</p>
+        <h2>Your gentle wellness journal</h2>
+        <p class="muted">Keep track of meals and drinks, notice your routines, and care for your little forest companion.</p>
+        <div class="auth-tabs" role="tablist" aria-label="Account options">
+          <button id="showLoginButton" class="auth-tab active" type="button" role="tab" aria-selected="true">Log in</button>
+          <button id="showSignupButton" class="auth-tab" type="button" role="tab" aria-selected="false">Create account</button>
+        </div>
+
+        <form id="loginForm" class="form-stack">
+          <label for="loginUsername">Username</label>
+          <input id="loginUsername" name="username" autocomplete="username" required maxlength="24" placeholder="Your username">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" name="password" type="password" autocomplete="current-password" required placeholder="Your demo password">
+          <button class="button button-primary" type="submit">Enter the forest</button>
+          <p id="loginMessage" class="form-message" aria-live="polite"></p>
+        </form>
+
+        <form id="signupForm" class="form-stack hidden">
+          <label for="signupUsername">Choose a username</label>
+          <input id="signupUsername" name="username" autocomplete="username" required minlength="3" maxlength="24" placeholder="At least 3 characters">
+          <label for="signupPassword">Create a demo password</label>
+          <input id="signupPassword" name="password" type="password" autocomplete="new-password" required minlength="4" placeholder="At least 4 characters">
+          <label for="signupPetName">Name your mushroom-frog pet</label>
+          <input id="signupPetName" name="petName" required maxlength="20" placeholder="e.g. Momo, Moss, Sprout">
+          <button class="button button-primary" type="submit">Create my forest</button>
+          <p class="small-note">Demo only: your account is saved in this browser, not on a secure server.</p>
+          <p id="signupMessage" class="form-message" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <div id="app" class="hidden">
+      <section class="welcome-banner">
+        <div>
+          <p class="eyebrow">YOUR PERSONAL FOREST</p>
+          <h2>Little steps, leafy growth 🌿</h2>
+          <p>Log what you eat and drink, then use your journal to explore patterns over time.</p>
+        </div>
+        <div class="banner-leaves" aria-hidden="true">🌿 ✨ 🍃</div>
+      </section>
+
+      <section class="pet-panel panel">
+        
+      <div id="petAvatar" class="pet-avatar" data-mod="resting" aria-hidden="true">
+        <span id="petEmoji">🐸</span>
+        <img
+          id="petImage"
+          class="pet-image hidden"
+          src="images/pet-healthy.png"
+          alt=""
+        >
+        <span class="pet-cap">🍄</span>
+      </div>
+
+      <div class="pet-copy">
+          <p class="eyebrow">YOUR FOREST COMPANION</p>
+          <h2><span id="petNameDisplay">Momo</span> <span id="petMood" class="mood-label">is growing</span></h2>
+          <p id="petMessage" class="muted" aria-live="polite">Every entry helps your forest journal grow.</p>
+        </div>
+        <form id="renamePetForm" class="rename-form">
+          <label for="newPetName">Rename pet</label>
+          <div class="inline-form">
+            <input id="newPetName" maxlength="20" required placeholder="New pet name">
+            <button class="button button-secondary" type="submit">Save</button>
+          </div>
+          <p id="petMessageStatus" class="form-message" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">YOUR DAILY JOURNAL</p>
+            <h2>Meal diary 🍲</h2>
+          </div>
+          <div class="date-control">
+            <label for="selectedDate">Journal date</label>
+            <input id="selectedDate" type="date">
+          </div>
+        </div>
+
+        <form id="mealForm" class="entry-form">
+          <div class="form-grid">
+            <div>
+              <label for="mealDate">Meal date</label>
+              <input id="mealDate" type="date" required>
+            </div>
+            <div>
+              <label for="mealTime">Time</label>
+              <input id="mealTime" type="time" required>
+            </div>
+            <div>
+              <label for="mealType">Meal type</label>
+              <select id="mealType" required>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Dinner">Dinner</option>
+                <option value="Snack">Snack</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="wide-field">
+              <label for="mealName">Meal or food name</label>
+              <input id="mealName" required maxlength="100" placeholder="e.g. Grilled chicken rice bowl">
+            </div>
+            <div class="wide-field">
+              <label for="ingredients">Ingredients and amounts</label>
+              <textarea id="ingredients" rows="2" placeholder="e.g. 1 cup rice, 100 g chicken, 1/2 cup broccoli"></textarea>
+            </div>
+            <div class="wide-field food-builder">
+              <label for="foodSearchQuery">Search USDA Ingredients</label>
+              <div class="inline-form">
+                <input 
+                  id="foodSearchQuery"
+                  type="search"
+                  placeholder="e.g.cooked broccoli"
+                />
+                <button
+                  id="foodSearchButton"
+                  class="button button-secondary"
+                  type="button"
+                  >
+                  Search
+                </button>
+              </div>
+              <p id="foodSearchMessage" class="form-message"
+                aria-live="polite"></p>
+              <div id="foodSearchResults" class="food-search-results"></div>
+              <div id="selectedFoodControls"
+                class="selected-food-controls hidden">
+                <p>Selected:<strong id="selectedIngredientName"></strong></p>
+                <label for="foodAmountGrams">Amount(grams)</label>
+                <input 
+                  id="foodAmountGrams"
+                  type="number"
+                  min="0.1"
+                  max="10000"
+                  step="0.1"
+                  value="100"
+                />
+                <button
+                  id="addFoodToMealButton"
+                  class="button button-secondary"
+                  type="button"
+                  >
+                  Add Ingredient
+                </button>
+              </div>
+              <div id="mealFoodItems"class="food-search-results"></div>
+            </div>
+            <div class="wide-field">
+              <label for="seasonings">Spices, sauces, salt and seasonings (amounts)</label>
+              <input id="seasonings" placeholder="e.g. 1 tsp soy sauce, 1/4 tsp salt, garlic">
+            </div>
+            <div>
+              <label for="portion">Portion / serving size</label>
+              <input id="portion" placeholder="e.g. 1 bowl, 250 g">
+            </div>
+            <div>
+              <label for="cookingMethod">Cooking method</label>
+              <select id="cookingMethod">
+                <option value="">Choose if known</option>
+                <option>Raw / salad</option>
+                <option>Boiled</option>
+                <option>Steamed</option>
+                <option>Grilled</option>
+                <option>Baked / roasted</option>
+                <option>Air-fried</option>
+                <option>Pan-fried</option>
+                <option>Deep-fried</option>
+                <option>Microwaved</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="calories">Calories (kcal)</label>
+              <input id="calories" type="number" min="0" step="any" placeholder="Optional">
+            </div>
+            <div>
+              <label for="carbs">Carbohydrates (g)</label>
+              <input id="carbs" type="number" min="0" step="any" placeholder="Optional">
+            </div>
+            <div>
+              <label for="sodium">Sodium (mg)</label>
+              <input id="sodium" type="number" min="0" step="any" placeholder="Optional">
+            </div>
+            <div>
+              <label for="satFat">Saturated fat (g)</label>
+              <input id="satFat" type="number" min="0" step="any" placeholder="Optional">
+            </div>
+          </div>
+          <p class="small-note">Nutrition values are optional. Use a food label or reliable nutrition database when possible; blank values are treated as unknown, not zero.</p>
+          <button class="button button-primary" type="submit">Add meal to journal</button>
+          <p id="mealFormMessage" class="form-message" aria-live="polite"></p>
+        </form>
+
+        <div class="subsection-heading">
+          <h3>Meals for <span id="mealListDate"></span></h3>
+          <span id="mealCount" class="count-pill">0 entries</span>
+        </div>
+        <div id="mealList" class="meal-list"></div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">DON'T FORGET YOUR CUP</p>
+            <h2>Hydration journal 💧</h2>
+          </div>
+        </div>
+        <form id="drinkForm" class="drink-form">
+          <div>
+            <label for="drinkDate">Date</label>
+            <input id="drinkDate" type="date" required>
+          </div>
+          <div>
+            <label for="drinkType">Drink</label>
+            <select id="drinkType">
+              <option>Water</option>
+              <option>Sparkling water</option>
+              <option>Tea</option>
+              <option>Milk</option>
+              <option>Juice</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="drinkAmount">Amount (mL)</label>
+            <input id="drinkAmount" type="number" min="1" step="any" required placeholder="e.g. 250">
+          </div>
+          <button class="button button-secondary" type="submit">Add drink</button>
+        </form>
+        <p id="drinkFormMessage" class="form-message" aria-live="polite"></p>
+        <div class="hydration-summary">
+          <div class="water-icon" aria-hidden="true">💧</div>
+          <div><p class="eyebrow">RECORDED DRINKS</p><strong id="waterTotal">0 mL</strong><p class="muted">for the selected journal date</p></div>
+        </div>
+        <div id="drinkList" class="drink-list"></div>
+        <p class="small-note">This is a record of drinks you logged, not a medical measurement of hydration status. Needs vary by person and activity.</p>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">A SNAPSHOT, NOT A SCORE</p>
+            <h2>Today's forest notes 🌱</h2>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><span>🔥 Recorded calories</span><strong id="dailyCalories">—</strong><p>kcal, when entered</p></article>
+          <article class="stat-card"><span>🌾 Carbohydrates</span><strong id="dailyCarbs">—</strong><p>grams, when entered</p></article>
+          <article class="stat-card"><span>🧂 Sodium</span><strong id="dailySodium">—</strong><p>mg, when entered</p></article>
+          <article class="stat-card"><span>🥑 Saturated fat</span><strong id="dailySatFat">—</strong><p>grams, when entered</p></article>
+        </div>
+        <p id="analysisNote" class="small-note">Add meals with nutrition information to see a daily summary.</p>
+      </section>
+
+      <section id="forestRhythm" class="panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">THE WISDOM OF THE WOODS</p>
+            <h2>Your Forest Rhythm 🌿</h2>
+            <p class="muted">Explore your records from the last seven calendar days. This reflects what you logged, not everything you ate.</p>
+          </div>
+        </div>
+        <div class="insight-grid">
+          <article class="insight"><span>📅 Days with meals logged</span><strong id="steadyDays">—</strong><p>Out of the last 7 days</p></article>
+          <article class="insight"><span>🍲 Days with breakfast, lunch and dinner recorded</span><strong id="regularDays">—</strong><p>Logging pattern only, not a judgment</p></article>
+          <article class="insight"><span>🥕 Days with varied food groups</span><strong id="varietyDays">—</strong><p>Based on food names and ingredients</p></article>
+          <article class="insight"><span>🌱 Forest status</span><strong id="rhythmStatus">Growing</strong><p id="rhythmMessage">Keep recording to discover your patterns.</p></article>
+        </div>
+        <p class="small-note">Food-group estimates use simple keyword matching and may miss foods. This report is for reflection, not a medical or dietary assessment.</p>
+      </section>
+
+      <footer class="app-footer">
+        <p>Made for gentle habits, not perfection. 🌙</p>
+        <p>Your demo data is stored in this browser's local storage.</p>
+      </footer>
+    </div>
+  </main>
+</body>
+</html>
+

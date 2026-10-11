@@ -1,0 +1,752 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+
+:root {
+  --forest: #244d3b;
+  --forest-deep: #17382b;
+  --leaf: #71966a;
+  --moss: #dce8d5;
+  --cream: #fbf8ef;
+  --paper: #fffdf7;
+  --ink: #26372c;
+  --muted: #6b796d;
+  --border: #dce5d6;
+  --pink: #f1d9d4;
+  --gold: #e7c67c;
+  --shadow: 0 12px 34px rgba(29, 58, 42, .08);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at 8% 4%, #e8f0df 0, transparent 26rem), var(--cream);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.55;
+}
+
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.2rem max(5vw, 1rem);
+  background: rgba(255,253,247,.88);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand { display: flex; align-items: center; gap: .85rem; }
+.brand-icon {
+  display: grid;
+  place-items: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 1.1rem;
+  background: var(--moss);
+  font-size: 1.7rem;
+}
+
+h1, h2, h3 { margin: 0; line-height: 1.2; }
+h1, h2 { font-family: 'Playfair Display', Georgia, serif; }
+h1 { font-size: 1.5rem; color: var(--forest-deep); }
+h2 { font-size: clamp(1.45rem, 2.5vw, 2rem); color: var(--forest-deep); }
+h3 { font-size: 1.1rem; }
+p { margin: .45rem 0 0; }
+
+.eyebrow {
+  margin: 0 0 .35rem;
+  color: var(--leaf);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .13em;
+}
+
+.page-wrap {
+  width: min(1100px, calc(100% - 2rem));
+  margin: 2rem auto 4rem;
+}
+
+.panel {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 1.35rem;
+  padding: clamp(1.1rem, 3vw, 2rem);
+  margin-bottom: 1.35rem;
+  box-shadow: var(--shadow);
+}
+
+.hidden { display: none !important; }
+.muted, .small-note { color: var(--muted); }
+.small-note { font-size: .84rem; margin: .75rem 0 1rem; }
+
+.account-bar {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  color: var(--forest);
+  font-weight: 600;
+}
+
+.auth-panel {
+  display: grid;
+  grid-template-columns: .8fr 1.2fr;
+  overflow: hidden;
+  padding: 0;
+  min-height: 490px;
+}
+
+.auth-art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 350px;
+  background: linear-gradient(150deg, #dcebd2, #b7d0b2 55%, #8eae91);
+  overflow: hidden;
+}
+
+.auth-art::before, .auth-art::after {
+  content: "";
+  position: absolute;
+  width: 17rem;
+  height: 17rem;
+  border-radius: 50%;
+  background: rgba(255,255,255,.18);
+}
+
+.auth-art::before { left: -6rem; bottom: -5rem; }
+.auth-art::after { right: -7rem; top: -6rem; }
+
+.moon {
+  position: absolute;
+  top: 1.2rem;
+  right: 2rem;
+  font-size: 3rem;
+  color: #fff7cf;
+}
+
+.mushroom-large {
+  position: absolute;
+  top: 22%;
+  left: 17%;
+  font-size: 3.8rem;
+  transform: rotate(-12deg);
+}
+
+.frog-large {
+  font-size: 8rem;
+  z-index: 1;
+  filter: drop-shadow(0 12px 4px rgba(33,66,41,.13));
+}
+
+.sparkle { position: absolute; color: white; font-size: 2rem; }
+.sparkle-one { top: 31%; right: 20%; }
+.sparkle-two { bottom: 22%; left: 20%; }
+
+.auth-content {
+  padding: clamp(1.5rem, 4vw, 3rem);
+  align-self: center;
+}
+
+.auth-content h2 { margin-bottom: .6rem; }
+
+.auth-tabs {
+  display: flex;
+  gap: .4rem;
+  background: #edf2e8;
+  border-radius: .8rem;
+  padding: .3rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.auth-tab {
+  flex: 1;
+  border: 0;
+  border-radius: .6rem;
+  padding: .7rem;
+  color: var(--muted);
+  background: transparent;
+  font-weight: 700;
+}
+
+.auth-tab.active {
+  color: var(--forest-deep);
+  background: white;
+  box-shadow: 0 2px 8px rgba(25,50,33,.08);
+}
+
+.form-stack { display: grid; gap: .55rem; }
+
+label {
+  display: block;
+  font-size: .88rem;
+  color: var(--forest);
+  font-weight: 700;
+  margin-bottom: .28rem;
+}
+
+input, select, textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #d5dfd0;
+  border-radius: .7rem;
+  padding: .72rem .8rem;
+  background: #fffefa;
+  color: var(--ink);
+  outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--leaf);
+  box-shadow: 0 0 0 3px rgba(113,150,106,.15);
+}
+
+textarea { resize: vertical; }
+
+.button {
+  border: 0;
+  border-radius: .75rem;
+  padding: .76rem 1rem;
+  font-weight: 700;
+  transition: transform .15s, filter .15s;
+}
+
+.button:hover { filter: brightness(.97); transform: translateY(-1px); }
+.button-primary { background: var(--forest); color: white; margin-top: .5rem; }
+.button-secondary { background: #e3eddc; color: var(--forest-deep); }
+.button-ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--forest);
+  padding: .55rem .8rem;
+}
+
+.form-message { min-height: 1.2rem; color: #9a4c3e; font-size: .86rem; }
+.form-message.success { color: var(--forest); }
+
+.welcome-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.8rem 2rem;
+  margin-bottom: 1.35rem;
+  border-radius: 1.35rem;
+  color: white;
+  background: linear-gradient(120deg, #214b38, #477753);
+  overflow: hidden;
+}
+
+.welcome-banner h2 { color: white; }
+.welcome-banner .eyebrow { color: #c6dfb9; }
+.welcome-banner p:not(.eyebrow) { max-width: 620px; color: #e1eddb; }
+.banner-leaves { font-size: 2.2rem; white-space: nowrap; }
+
+.pet-panel {
+  display: grid;
+  grid-template-columns: auto 1fr minmax(220px, .8fr);
+  align-items: center;
+  gap: 1.3rem;
+}
+
+.pet-avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 1.5rem;
+  background: #e5efdd;
+  font-size: 3.1rem;
+}
+
+.pet-cap { position: absolute; top: -.55rem; right: -.45rem; font-size: 1.8rem; }
+.pet-copy h2 { font-size: 1.6rem; }
+
+.mood-label {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .85rem;
+  font-weight: 500;
+  color: var(--leaf);
+  margin-top: .3rem;
+}
+
+.rename-form { padding-left: 1rem; border-left: 1px solid var(--border); }
+.inline-form { display: flex; gap: .4rem; }
+.inline-form input { flex: 1; }
+.inline-form .button { flex: 0 0 auto; }
+
+.section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+
+.date-control { width: 190px; }
+
+.entry-form {
+  border-radius: 1rem;
+  padding: 1.2rem;
+  background: #f7f8f0;
+  border: 1px solid #e5ebdf;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.wide-field { grid-column: span 2; }
+.entry-form > .button { margin-top: 1rem; }
+
+.subsection-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1.7rem 0 .8rem;
+}
+
+.count-pill {
+  background: var(--moss);
+  color: var(--forest);
+  border-radius: 99px;
+  padding: .3rem .7rem;
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+.meal-list, .drink-list { display: grid; gap: .7rem; }
+
+.meal-card, .drink-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid var(--border);
+  border-radius: .9rem;
+  padding: 1rem;
+  background: white;
+}
+
+.meal-card h4 { margin: 0; font-size: 1rem; }
+.meal-meta { font-size: .82rem; color: var(--muted); margin-top: .25rem; }
+.meal-details { font-size: .88rem; margin-top: .55rem; overflow-wrap: anywhere; }
+.nutrition-chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .6rem; }
+
+.nutrition-chip {
+  border-radius: 99px;
+  padding: .2rem .55rem;
+  background: #f0f4e9;
+  color: var(--forest);
+  font-size: .75rem;
+}
+
+.delete-button {
+  flex: 0 0 auto;
+  border: 1px solid #ead9d4;
+  background: #fff7f4;
+  color: #965647;
+  border-radius: .6rem;
+  padding: .45rem .65rem;
+  font-size: .8rem;
+}
+
+.empty-state {
+  padding: 1.2rem;
+  border: 1px dashed #cbd8c5;
+  border-radius: .9rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.drink-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  align-items: end;
+  gap: .8rem;
+}
+
+.hydration-summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #edf5f6;
+  border-radius: 1rem;
+  padding: 1rem 1.2rem;
+  margin: 1.2rem 0;
+}
+
+.water-icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  background: white;
+  font-size: 1.6rem;
+}
+
+.hydration-summary strong { font-size: 1.6rem; color: #386b77; }
+.hydration-summary p { margin-top: .1rem; }
+.drink-card { align-items: center; }
+
+.stats-grid, .insight-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .8rem;
+}
+
+.stat-card, .insight {
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.1rem;
+  background: #fbfcf7;
+}
+
+.stat-card span, .insight span { display: block; color: var(--muted); font-size: .82rem; }
+
+.stat-card strong, .insight strong {
+  display: block;
+  margin-top: .6rem;
+  color: var(--forest-deep);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.8rem;
+}
+
+.stat-card p, .insight p { font-size: .82rem; color: var(--muted); }
+.insight { background: linear-gradient(160deg, #fbfcf7, #f2f6ec); }
+.insight strong { font-size: 1.6rem; }
+
+.app-footer { text-align: center; padding: 1rem; color: var(--muted); font-size: .85rem; }
+.app-footer p + p { font-size: .76rem; }
+
+@media (max-width: 800px) {
+  .auth-panel { grid-template-columns: 1fr; }
+  .auth-art { min-height: 210px; }
+  .frog-large { font-size: 6rem; }
+  .mushroom-large { font-size: 2.5rem; }
+  .pet-panel { grid-template-columns: auto 1fr; }
+  .rename-form {
+    grid-column: 1 / -1;
+    border-left: 0;
+    border-top: 1px solid var(--border);
+    padding: 1rem 0 0;
+  }
+  .stats-grid, .insight-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .wide-field { grid-column: span 2; }
+}
+
+@media (max-width: 560px) {
+  .site-header { align-items: flex-start; padding: 1rem; }
+  .brand-icon { width: 2.6rem; height: 2.6rem; }
+  h1 { font-size: 1.2rem; }
+  .account-bar { flex-direction: column; align-items: flex-end; font-size: .82rem; }
+  .page-wrap { width: min(100% - 1rem, 1100px); margin-top: 1rem; }
+  .welcome-banner { padding: 1.3rem; }
+  .banner-leaves { display: none; }
+  .section-heading { flex-direction: column; }
+  .date-control { width: 100%; }
+  .form-grid, .drink-form { grid-template-columns: 1fr; }
+  .wide-field { grid-column: auto; }
+  .stats-grid, .insight-grid { grid-template-columns: 1fr 1fr; }
+  .stat-card, .insight { padding: .8rem; }
+  .stat-card strong, .insight strong { font-size: 1.4rem; }
+  .meal-card { padding: .8rem; }
+}
+
+.food-search-results {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 0.7rem;
+}
+
+.food-search-result {
+  display: block;
+  width: 100%;
+  margin-top: 0.2rem;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.selected-food-controls {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.9rem;
+  background: #f7f8f0;
+}
+
+.draft-food-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  padding: 0.8rem 1rem;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 0.8rem;
+}
+
+.draft-food-item p {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+
+
+.panel {
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 28px rgba(29, 58, 42, 0.07);
+}
+
+
+.panel + .panel {
+  margin-top: 1.1rem;
+}
+
+
+.section-heading {
+  align-items: center;
+}
+
+.section-heading h2 {
+  letter-spacing: -0.02em;
+}
+
+
+.entry-form {
+  background: linear-gradient(
+    145deg,
+    #f8faf3,
+    #f1f5eb
+  );
+  border-color: #e1e9d9;
+}
+
+
+.meal-card,
+.drink-card {
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.meal-card:hover,
+.drink-card:hover {
+  border-color: #b8cdb0;
+  box-shadow: 0 5px 16px rgba(29, 58, 42, 0.06);
+}
+
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 3px solid rgba(113, 150, 106, 0.42);
+  outline-offset: 2px;
+}
+
+
+.button {
+  min-height: 2.65rem;
+}
+
+.button-primary {
+  box-shadow: 0 4px 10px rgba(36, 77, 59, 0.12);
+}
+
+
+
+
+.pet-panel {
+  position: relative;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(220, 232, 213, 0.5),
+      transparent 45%
+    ),
+    var(--paper);
+}
+
+
+.pet-avatar {
+  position: relative;
+  overflow: hidden;
+
+  width: 7rem;
+  height: 7rem;
+  border-radius: 1.8rem;
+  flex-shrink: 0;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(36, 77, 59, 0.04);
+
+}
+
+
+.pet-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  object-fit: contain;
+  padding: 0.2rem;
+}
+
+.pet-cap {
+  pointer-events: none;
+}
+
+.pet-copy {
+  min-width: 0;
+}
+
+.pet-copy h2 {
+  line-height: 1.25;
+}
+
+#petMessage {
+  max-width: 42rem;
+  line-height: 1.6;
+}
+
+
+.pet-avatar[data-mood="healthy"] {
+  background: linear-gradient(
+    145deg,
+    #eaf3df,
+    #d5e8c8
+  );
+}
+
+.pet-avatar[data-mood="thirsty"] {
+  background: linear-gradient(
+    145deg,
+    #e7f4f6,
+    #cfe7ed
+  );
+}
+
+.pet-avatar[data-mood="drowsy"] {
+  background: linear-gradient(
+    145deg,
+    #f0ecf8,
+    #e0d8f0
+  );
+}
+
+.pet-avatar[data-mood="lost"] {
+  background: linear-gradient(
+    145deg,
+    #f0f0e9,
+    #e2e6dc
+  );
+}
+
+
+/* ==========================================
+   UI UPDATE 3 — 表单可读性
+   作用：让填写饮食、饮水记录更轻松
+   ========================================== */
+
+.form-grid {
+  row-gap: 1.1rem;
+}
+
+.entry-form label,
+.drink-form label,
+.rename-form label {
+  line-height: 1.35;
+}
+
+input,
+select,
+textarea {
+  min-height: 2.75rem;
+}
+
+textarea {
+  min-height: 4.2rem;
+}
+
+.small-note {
+  line-height: 1.55;
+}
+
+
+/* ==========================================
+   UI UPDATE 4 — 手机屏幕适配
+   作用：防止小屏幕上布局拥挤
+   ========================================== */
+
+@media (max-width: 800px) {
+  .pet-panel {
+    gap: 1rem;
+  }
+
+  .pet-avatar {
+    width: 6rem;
+    height: 6rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .pet-panel {
+    grid-template-columns: 5rem minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .pet-avatar {
+    width: 4.8rem;
+    height: 4.8rem;
+    border-radius: 1.25rem;
+    font-size: 2.5rem;
+  }
+
+  .pet-copy h2 {
+    font-size: 1.35rem;
+  }
+
+  /* 把改名表单放到青蛙和介绍的下方 */
+  .rename-form {
+    grid-column: 1 / -1;
+  }
+
+  .inline-form {
+    align-items: stretch;
+  }
+
+  .inline-form input {
+    min-width: 0;
+  }
+
+  .section-heading {
+    gap: 0.75rem;
+  }
+
+  .meal-card,
+  .drink-card {
+    gap: 0.65rem;
+  }
+}
+
+/* ===== UI UPDATE END ===== */

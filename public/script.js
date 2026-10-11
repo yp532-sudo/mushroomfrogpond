@@ -5,6 +5,22 @@
 // Never use this pattern for real accounts or sensitive information.
 const USERS_KEY = 'enchantedForestDemoUsers';
 const SESSION_KEY = 'enchantedForestDemoSession';
+const PET_MOOD_IMAGES = {
+  thirsty: 'images/pet-thirsty.png',
+  stomachDiscomfort: 'images/pet-stomach-discomfort.png',
+  bloated: 'images/pet-bloated.png',
+  drowsy: 'images/pet-drowsy.png',
+  healthy: 'images/pet-healthy.png',
+  lost: 'images/pet-lost.png'
+};
+const PET_MOOD_PHRASES = {
+  thirsty: 'is thirsty',
+  stomachDiscomfort: 'has stomach discomfort',
+  bloated: 'is bloated',
+  drowsy: 'is drowsy',
+  healthy: 'is healthy',
+  lost: 'is lost'
+};
 
 const $ = (id) => document.getElementById(id);
 
@@ -190,6 +206,48 @@ function renamePet(event) {
   );
 
   updatePet();
+}
+function renderPetImage(mood) {
+  const image = $('petImage');
+  const emoji = $('petEmoji');
+  const avatar = $('petAvatar');
+
+  if (!image || !emoji || !avatar) {
+    console.error('找不到青蛙图片相关元素');
+    return;
+  }
+
+  const imagePath =
+    PET_MOOD_IMAGES[mood] || PET_MOOD_IMAGES.healthy;
+
+  // 先隐藏图片，避免旧图片状态干扰
+  image.classList.add('hidden');
+
+  image.onload = () => {
+    image.classList.remove('hidden');
+    emoji.classList.add('hidden');
+    avatar.classList.add('has-image');
+  };
+
+  image.onerror = () => {
+    image.classList.add('hidden');
+    emoji.classList.remove('hidden');
+    avatar.classList.remove('has-image');
+    console.error('青蛙图片加载失败：', imagePath);
+  };
+
+  // 图片路径相同时也确保重新检查显示状态
+  if (image.src === new URL(imagePath, document.baseURI).href && image.complete) {
+    if (image.naturalWidth > 0) {
+      image.classList.remove('hidden');
+      emoji.classList.add('hidden');
+      avatar.classList.add('has-image');
+    } else {
+      image.onerror();
+    }
+  } else {
+    image.src = imagePath;
+  }
 }
 
 function optionalNumber(id) {
@@ -595,6 +653,9 @@ function updatePet() {
     $('petMessage').textContent =
       'Add an entry whenever you like. Your pet is never disappointed in you.';
   }
+
+  
+  renderPetImage('healthy');
 }
 
 function renderAll() {

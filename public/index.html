@@ -74,11 +74,22 @@
       </section>
 
       <section class="pet-panel panel">
-        <div class="pet-avatar" aria-hidden="true"><span id="petEmoji">🐸</span><span class="pet-cap">🍄</span></div>
-        <div class="pet-copy">
+        
+      <div id="petAvatar" class="pet-avatar" data-mod="resting" aria-hidden="true">
+        <span id="petEmoji">🐸</span>
+        <img
+          id="petImage"
+          class="pet-image hidden"
+          src="images/pet-healthy.png"
+          alt=""
+        >
+        <span class="pet-cap">🍄</span>
+      </div>
+
+      <div class="pet-copy">
           <p class="eyebrow">YOUR FOREST COMPANION</p>
           <h2><span id="petNameDisplay">Momo</span> <span id="petMood" class="mood-label">is growing</span></h2>
-          <p id="petMessage" class="muted">Every entry helps your forest journal grow.</p>
+          <p id="petMessage" class="muted" aria-live="polite">Every entry helps your forest journal grow.</p>
         </div>
         <form id="renamePetForm" class="rename-form">
           <label for="newPetName">Rename pet</label>

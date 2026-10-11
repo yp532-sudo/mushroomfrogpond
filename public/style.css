@@ -504,3 +504,249 @@ textarea { resize: vertical; }
   color: var(--muted);
   font-size: 0.85rem;
 }
+
+
+
+.panel {
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 28px rgba(29, 58, 42, 0.07);
+}
+
+
+.panel + .panel {
+  margin-top: 1.1rem;
+}
+
+
+.section-heading {
+  align-items: center;
+}
+
+.section-heading h2 {
+  letter-spacing: -0.02em;
+}
+
+
+.entry-form {
+  background: linear-gradient(
+    145deg,
+    #f8faf3,
+    #f1f5eb
+  );
+  border-color: #e1e9d9;
+}
+
+
+.meal-card,
+.drink-card {
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.meal-card:hover,
+.drink-card:hover {
+  border-color: #b8cdb0;
+  box-shadow: 0 5px 16px rgba(29, 58, 42, 0.06);
+}
+
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 3px solid rgba(113, 150, 106, 0.42);
+  outline-offset: 2px;
+}
+
+
+.button {
+  min-height: 2.65rem;
+}
+
+.button-primary {
+  box-shadow: 0 4px 10px rgba(36, 77, 59, 0.12);
+}
+
+
+
+
+.pet-panel {
+  position: relative;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(220, 232, 213, 0.5),
+      transparent 45%
+    ),
+    var(--paper);
+}
+
+
+.pet-avatar {
+  position: relative;
+  overflow: hidden;
+
+  width: 7rem;
+  height: 7rem;
+  border-radius: 1.8rem;
+  flex-shrink: 0;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(36, 77, 59, 0.04);
+
+}
+
+
+.pet-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  object-fit: contain;
+  padding: 0.2rem;
+}
+
+.pet-cap {
+  pointer-events: none;
+}
+
+.pet-copy {
+  min-width: 0;
+}
+
+.pet-copy h2 {
+  line-height: 1.25;
+}
+
+#petMessage {
+  max-width: 42rem;
+  line-height: 1.6;
+}
+
+
+.pet-avatar[data-mood="healthy"] {
+  background: linear-gradient(
+    145deg,
+    #eaf3df,
+    #d5e8c8
+  );
+}
+
+.pet-avatar[data-mood="thirsty"] {
+  background: linear-gradient(
+    145deg,
+    #e7f4f6,
+    #cfe7ed
+  );
+}
+
+.pet-avatar[data-mood="drowsy"] {
+  background: linear-gradient(
+    145deg,
+    #f0ecf8,
+    #e0d8f0
+  );
+}
+
+.pet-avatar[data-mood="lost"] {
+  background: linear-gradient(
+    145deg,
+    #f0f0e9,
+    #e2e6dc
+  );
+}
+
+
+/* ==========================================
+   UI UPDATE 3 — 表单可读性
+   作用：让填写饮食、饮水记录更轻松
+   ========================================== */
+
+.form-grid {
+  row-gap: 1.1rem;
+}
+
+.entry-form label,
+.drink-form label,
+.rename-form label {
+  line-height: 1.35;
+}
+
+input,
+select,
+textarea {
+  min-height: 2.75rem;
+}
+
+textarea {
+  min-height: 4.2rem;
+}
+
+.small-note {
+  line-height: 1.55;
+}
+
+
+/* ==========================================
+   UI UPDATE 4 — 手机屏幕适配
+   作用：防止小屏幕上布局拥挤
+   ========================================== */
+
+@media (max-width: 800px) {
+  .pet-panel {
+    gap: 1rem;
+  }
+
+  .pet-avatar {
+    width: 6rem;
+    height: 6rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .pet-panel {
+    grid-template-columns: 5rem minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .pet-avatar {
+    width: 4.8rem;
+    height: 4.8rem;
+    border-radius: 1.25rem;
+    font-size: 2.5rem;
+  }
+
+  .pet-copy h2 {
+    font-size: 1.35rem;
+  }
+
+  /* 把改名表单放到青蛙和介绍的下方 */
+  .rename-form {
+    grid-column: 1 / -1;
+  }
+
+  .inline-form {
+    align-items: stretch;
+  }
+
+  .inline-form input {
+    min-width: 0;
+  }
+
+  .section-heading {
+    gap: 0.75rem;
+  }
+
+  .meal-card,
+  .drink-card {
+    gap: 0.65rem;
+  }
+}
+
+/* ===== UI UPDATE END ===== */
